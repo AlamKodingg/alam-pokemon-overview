@@ -49,3 +49,19 @@ body {
 .delete-button {
   background-color: #b72c2c;
 }
+
+#filter-buttons {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.filter-button {
+  padding: 8px 16px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: #fff;
+  font-size: 14px;
+}
