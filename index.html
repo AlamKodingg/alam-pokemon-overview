@@ -10,8 +10,20 @@
 <body>
   <div id="filter-buttons" class="filter-buttons">
   </div>
+  <button id="open-form-button">Create a Pokemon</button>
+  <div id="modal-backdrop"></div>
+  <div id="create-pokemon-modal" class="modal">
+    <form id="create-pokemon-form">
+      <label for="pokemonName">Name:</label>
+      <input type="text" id="pokemonName" required><br>
+      <label for="pokemonType">Type:</label>
+      <input type="text" id="pokemonType" required><br>
+      <button type="submit">Create Pokemon</button>
+    </form>
+  </div>
   <div id="container">
   </div>
+
 
   <template id="template">
     <div class="pokemon-card">
