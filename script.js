@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const createPokemonModal = document.getElementById('create-pokemon-modal');
   const createPokemonForm = document.getElementById('create-pokemon-form');
   const showfavouriteButton = document.getElementById('show-favourite-button');
-  const allPokemon = [];
+  let allPokemon = [];
 
   const typeColors = {
     normal: '#A8A878',
@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const name = card.querySelector('.pokemon-name');
     const type = card.querySelector('.pokemon-type');
     const favouriteButton = card.querySelector('.favourite-button');
+    const deleteButton = card.querySelector('.delete-button');
 
     const pokeType = pokemon?.types[0]?.type?.name || 'normal'
 
@@ -84,9 +85,18 @@ document.addEventListener('DOMContentLoaded', function () {
     allPokemon.push(pokemon)
 
     favouriteButton.dataset.pokemonId = pokemon.id
+    deleteButton.dataset.pokemonId = pokemon.id
+
     favouriteButton.addEventListener('click', function (event) {
       makefavourite(event.target.dataset.pokemonId);
       event.target.disabled = true
+    });
+
+    deleteButton.addEventListener('click', function (event) {
+      const favouritePokemon = JSON.parse(localStorage.getItem('favouritePokemon')) || [];
+      localStorage.setItem('favouritePokemon', JSON.stringify(favouritePokemon.filter(item => item !== event.target.dataset.pokemonId)));
+      event.target.parentElement.remove();
+      allPokemon = allPokemon.filter(item => item.id != event.target.dataset.pokemonId)
     });
   }
 
@@ -94,11 +104,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const image = card.querySelector('.pokemon-image');
     const name = card.querySelector('.pokemon-name');
     const type = card.querySelector('.pokemon-type');
+
     const removefavouriteButton = card.querySelector('.remove-favourite-button');
+    const deleteButton = card.querySelector('.delete-button');
 
     const pokeType = pokemon?.types[0]?.type?.name || 'normal'
 
-    debugger
     image.src = pokemon.sprites.front_default;
     name.textContent = pokemon.name;
     type.textContent = pokeType;
@@ -107,10 +118,20 @@ document.addEventListener('DOMContentLoaded', function () {
     allPokemon.push(pokemon)
 
     removefavouriteButton.dataset.pokemonId = pokemon.id
+    deleteButton.dataset.pokemonId = pokemon.id
+
     removefavouriteButton.addEventListener('click', function (event) {
       const favouritePokemon = JSON.parse(localStorage.getItem('favouritePokemon')) || [];
       localStorage.setItem('favouritePokemon', JSON.stringify(favouritePokemon.filter(item => item !== event.target.dataset.pokemonId)));
       event.target.parentElement.remove();
+    });
+
+    deleteButton.addEventListener('click', function (event) {
+      const favouritePokemon = JSON.parse(localStorage.getItem('favouritePokemon')) || [];
+      localStorage.setItem('favouritePokemon', JSON.stringify(favouritePokemon.filter(item => item !== event.target.dataset.pokemonId)));
+      event.target.parentElement.remove();
+
+      allPokemon = allPokemon.filter(item => item.id != event.target.dataset.pokemonId)
     });
   }
 
@@ -138,6 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function resetFilters() {
     container.innerHTML = '';
+    debugger
     allPokemon.forEach(pokemon => {
       const cardClone = template.content.cloneNode(true);
       const card = cardClone.querySelector('.pokemon-card');
@@ -210,8 +232,14 @@ document.addEventListener('DOMContentLoaded', function () {
       const cardClone = removefavouriteTemplate.content.cloneNode(true);
       const card = cardClone.querySelector('.pokemon-card');
       const pokemon = allPokemon.find(record => record.id == id)
-      fillfavouritePokemonCard(card, pokemon);
-      container.appendChild(card);
+
+      if (pokemon) {
+        fillfavouritePokemonCard(card, pokemon);
+        container.appendChild(card);
+      } else {
+        localStorage.setItem('favouritePokemon', JSON.stringify(favouritePokemon.filter(item => item !== id)));
+      }
+
     });
   }
 
