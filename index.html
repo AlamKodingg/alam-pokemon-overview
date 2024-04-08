@@ -11,6 +11,7 @@
   <div id="filter-buttons" class="filter-buttons">
   </div>
   <button id="open-form-button">Create a Pokemon</button>
+  <button id="show-favorite-button">Favorites</button>
   <div id="modal-backdrop"></div>
   <div id="create-pokemon-modal" class="modal">
     <form id="create-pokemon-form">
@@ -24,14 +25,24 @@
   <div id="container">
   </div>
 
-
   <template id="template">
     <div class="pokemon-card">
       <img class="pokemon-image" src="" alt="Pokemon Image">
       <h2 class="pokemon-name"></h2>
       <p class="pokemon-type"></p>
-      <button class="save-button">Save</button>
       <button class="edit-button">Edit</button>
+      <button class="favorite-button">Favorite</button>
+      <button class="delete-button">Delete</button>
+    </div>
+  </template>
+
+  <template id="remove-favorite-template">
+    <div class="pokemon-card">
+      <img class="pokemon-image" src="" alt="Pokemon Image">
+      <h2 class="pokemon-name"></h2>
+      <p class="pokemon-type"></p>
+      <button class="edit-button">Edit</button>
+      <button class="remove-favorite-button">Remove Favorite</button>
       <button class="delete-button">Delete</button>
     </div>
   </template>
