@@ -29,8 +29,8 @@ body {
 
 .save-button,
 .delete-button,
-.edit-button, .favorite-button,
-.remove-favorite-button {
+.edit-button, .favourite-button,
+.remove-favourite-button {
   margin-top: 10px;
   padding: 8px 16px;
   border: none;
@@ -53,11 +53,11 @@ body {
   background-color: #b72c2c;
 }
 
-.favorite-button {
+.favourite-button {
   background-color: #15b1c6;
 }
 
-.remove-favorite-button {
+.remove-favourite-button {
   background-color: #15b1c6;
 }
 

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const modalBackdrop = document.getElementById('modal-backdrop');
   const createPokemonModal = document.getElementById('create-pokemon-modal');
   const createPokemonForm = document.getElementById('create-pokemon-form');
-  const showFavoriteButton = document.getElementById('show-favorite-button');
+  const showfavouriteButton = document.getElementById('show-favourite-button');
   const allPokemon = [];
 
   const typeColors = {
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const image = card.querySelector('.pokemon-image');
     const name = card.querySelector('.pokemon-name');
     const type = card.querySelector('.pokemon-type');
-    const favoriteButton = card.querySelector('.favorite-button');
+    const favouriteButton = card.querySelector('.favourite-button');
 
     const pokeType = pokemon?.types[0]?.type?.name || 'normal'
 
@@ -83,21 +83,22 @@ document.addEventListener('DOMContentLoaded', function () {
     card.style.backgroundColor = typeColor;
     allPokemon.push(pokemon)
 
-    favoriteButton.dataset.pokemonId = pokemon.id
-    favoriteButton.addEventListener('click', function (event) {
-      makeFavorite(event.target.dataset.pokemonId);
+    favouriteButton.dataset.pokemonId = pokemon.id
+    favouriteButton.addEventListener('click', function (event) {
+      makefavourite(event.target.dataset.pokemonId);
       event.target.disabled = true
     });
   }
 
-  function fillFavoritePokemonCard(card, pokemon) {
+  function fillfavouritePokemonCard(card, pokemon) {
     const image = card.querySelector('.pokemon-image');
     const name = card.querySelector('.pokemon-name');
     const type = card.querySelector('.pokemon-type');
-    const removeFavoriteButton = card.querySelector('.remove-favorite-button');
+    const removefavouriteButton = card.querySelector('.remove-favourite-button');
 
     const pokeType = pokemon?.types[0]?.type?.name || 'normal'
 
+    debugger
     image.src = pokemon.sprites.front_default;
     name.textContent = pokemon.name;
     type.textContent = pokeType;
@@ -105,10 +106,10 @@ document.addEventListener('DOMContentLoaded', function () {
     card.style.backgroundColor = typeColor;
     allPokemon.push(pokemon)
 
-    removeFavoriteButton.dataset.pokemonId = pokemon.id
-    removeFavoriteButton.addEventListener('click', function (event) {
-      const favoritePokemon = JSON.parse(localStorage.getItem('favoritePokemon')) || [];
-      localStorage.setItem('favoritePokemon', JSON.stringify(favoritePokemon.filter(item => item !== event.target.dataset.pokemonId)));
+    removefavouriteButton.dataset.pokemonId = pokemon.id
+    removefavouriteButton.addEventListener('click', function (event) {
+      const favouritePokemon = JSON.parse(localStorage.getItem('favouritePokemon')) || [];
+      localStorage.setItem('favouritePokemon', JSON.stringify(favouritePokemon.filter(item => item !== event.target.dataset.pokemonId)));
       event.target.parentElement.remove();
     });
   }
@@ -172,9 +173,11 @@ document.addEventListener('DOMContentLoaded', function () {
       types: [{ type: { name: type } }],
       sprites: {
         front_default: defaultImageUrl
-      }
+      },
+      id: generateRandomId(8)
     };
 
+    allPokemon.push(newPokemon);
     const cardClone = template.content.cloneNode(true);
     const card = cardClone.querySelector('.pokemon-card');
     fillPokemonCard(card, newPokemon);
@@ -185,30 +188,43 @@ document.addEventListener('DOMContentLoaded', function () {
     createPokemonModal.style.display = 'none';
   });
 
-  function makeFavorite(pokemon) {
-    const favoritePokemon = JSON.parse(localStorage.getItem('favoritePokemon')) || [];
-    if (favoritePokemon.length >= 5) {
-      alert('Maximum limit of favorite Pokemon reached. Please delete a favorite Pokemon to save a new one.');
+  function makefavourite(pokemon) {
+    const favouritePokemon = JSON.parse(localStorage.getItem('favouritePokemon')) || [];
+    if (favouritePokemon.length >= 5) {
+      alert('Maximum limit of favourite Pokemon reached. Please delete a favourite Pokemon to save a new one.');
       return;
     }
 
-    favoritePokemon.push(pokemon);
-    localStorage.setItem('favoritePokemon', JSON.stringify(favoritePokemon));
+    favouritePokemon.push(pokemon);
+    localStorage.setItem('favouritePokemon', JSON.stringify(favouritePokemon));
   }
 
-  showFavoriteButton.addEventListener('click', () => displayFavoritePokemon())
+  showfavouriteButton.addEventListener('click', () => displayfavouritePokemon())
 
-  function displayFavoritePokemon() {
+  function displayfavouritePokemon() {
     container.innerHTML = ''
-    const favoritePokemon = JSON.parse(localStorage.getItem('favoritePokemon')) || [];
-    const removeFavoriteTemplate = document.getElementById('remove-favorite-template');
+    const favouritePokemon = JSON.parse(localStorage.getItem('favouritePokemon')) || [];
+    const removefavouriteTemplate = document.getElementById('remove-favourite-template');
     debugger
-    favoritePokemon.forEach(function (id) {
-      const cardClone = removeFavoriteTemplate.content.cloneNode(true);
+    favouritePokemon.forEach(function (id) {
+      const cardClone = removefavouriteTemplate.content.cloneNode(true);
       const card = cardClone.querySelector('.pokemon-card');
       const pokemon = allPokemon.find(record => record.id == id)
-      fillFavoritePokemonCard(card, pokemon);
+      fillfavouritePokemonCard(card, pokemon);
       container.appendChild(card);
     });
   }
+
+  function generateRandomId(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomId = '';
+
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomId += characters.charAt(randomIndex);
+    }
+
+    return randomId;
+  }
+
 });
