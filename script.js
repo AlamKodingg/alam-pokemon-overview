@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const type = card.querySelector('.pokemon-type');
     const favouriteButton = card.querySelector('.favourite-button');
     const deleteButton = card.querySelector('.delete-button');
+    const editButton = card.querySelector('.edit-button');
 
     const pokeType = pokemon?.types[0]?.type?.name || 'normal'
 
@@ -86,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     favouriteButton.dataset.pokemonId = pokemon.id
     deleteButton.dataset.pokemonId = pokemon.id
+    editButton.dataset.pokemonId = pokemon.id
 
     favouriteButton.addEventListener('click', function (event) {
       makefavourite(event.target.dataset.pokemonId);
@@ -98,16 +100,25 @@ document.addEventListener('DOMContentLoaded', function () {
       event.target.parentElement.remove();
       allPokemon = allPokemon.filter(item => item.id != event.target.dataset.pokemonId)
     });
+
+    editButton.addEventListener('click', function (event) {
+      modalBackdrop.style.display = 'block';
+      createPokemonModal.style.display = 'block';
+      const pokemon = allPokemon.find(record => record.id == event.target.dataset.pokemonId)
+
+      createPokemonForm.querySelector('.create-pokemon').textContent = 'Update'
+      createPokemonForm.querySelector('#pokemonName').value = pokemon.name
+      createPokemonForm.querySelector('#pokemonType').value = pokemon?.types[0]?.type?.name || 'normal'
+
+      createPokemonForm.dataset.pokemonId = event.target.dataset.pokemonId;
+    });
   }
 
   function fillfavouritePokemonCard(card, pokemon) {
     const image = card.querySelector('.pokemon-image');
     const name = card.querySelector('.pokemon-name');
     const type = card.querySelector('.pokemon-type');
-
     const removefavouriteButton = card.querySelector('.remove-favourite-button');
-    const deleteButton = card.querySelector('.delete-button');
-
     const pokeType = pokemon?.types[0]?.type?.name || 'normal'
 
     image.src = pokemon.sprites.front_default;
@@ -118,20 +129,11 @@ document.addEventListener('DOMContentLoaded', function () {
     allPokemon.push(pokemon)
 
     removefavouriteButton.dataset.pokemonId = pokemon.id
-    deleteButton.dataset.pokemonId = pokemon.id
 
     removefavouriteButton.addEventListener('click', function (event) {
       const favouritePokemon = JSON.parse(localStorage.getItem('favouritePokemon')) || [];
       localStorage.setItem('favouritePokemon', JSON.stringify(favouritePokemon.filter(item => item !== event.target.dataset.pokemonId)));
       event.target.parentElement.remove();
-    });
-
-    deleteButton.addEventListener('click', function (event) {
-      const favouritePokemon = JSON.parse(localStorage.getItem('favouritePokemon')) || [];
-      localStorage.setItem('favouritePokemon', JSON.stringify(favouritePokemon.filter(item => item !== event.target.dataset.pokemonId)));
-      event.target.parentElement.remove();
-
-      allPokemon = allPokemon.filter(item => item.id != event.target.dataset.pokemonId)
     });
   }
 
@@ -159,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function resetFilters() {
     container.innerHTML = '';
-    debugger
+
     allPokemon.forEach(pokemon => {
       const cardClone = template.content.cloneNode(true);
       const card = cardClone.querySelector('.pokemon-card');
@@ -187,23 +189,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const name = document.getElementById('pokemonName').value;
     const type = document.getElementById('pokemonType').value;
-
+    const id = event.target.dataset?.pokemonId
+    const pokemon = allPokemon.find(record => record.id == id)
     const defaultImageUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/16.png';
 
     const newPokemon = {
       name: name,
       types: [{ type: { name: type } }],
-      sprites: {
+      sprites: pokemon ? pokemon.sprites : {
         front_default: defaultImageUrl
       },
-      id: generateRandomId(8)
+      id: id ? id : generateRandomId(8)
     };
 
-    allPokemon.push(newPokemon);
-    const cardClone = template.content.cloneNode(true);
-    const card = cardClone.querySelector('.pokemon-card');
-    fillPokemonCard(card, newPokemon);
-    container.prepend(card);
+    if (id) {
+      const index = allPokemon.findIndex(obj => obj.id == id);
+      allPokemon[index] = newPokemon;
+      let favouritePokemon = JSON.parse(localStorage.getItem('favouritePokemon')) || [];
+      const favIndex = favouritePokemon.findIndex(obj => obj == id);
+
+      if (favIndex) {
+        favouritePokemon[favIndex] = newPokemon
+        localStorage.setItem('favouritePokemon', JSON.stringify(favouritePokemon));
+      }
+
+
+      resetFilters();
+    } else {
+      allPokemon.unshift(newPokemon);
+      const cardClone = template.content.cloneNode(true);
+      const card = cardClone.querySelector('.pokemon-card');
+      fillPokemonCard(card, newPokemon);
+      container.prepend(card);
+    }
 
     createPokemonForm.reset();
     modalBackdrop.style.display = 'none';
@@ -227,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
     container.innerHTML = ''
     const favouritePokemon = JSON.parse(localStorage.getItem('favouritePokemon')) || [];
     const removefavouriteTemplate = document.getElementById('remove-favourite-template');
-    debugger
+
     favouritePokemon.forEach(function (id) {
       const cardClone = removefavouriteTemplate.content.cloneNode(true);
       const card = cardClone.querySelector('.pokemon-card');

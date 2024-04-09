@@ -1,54 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pokemon Overview</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js"></script>
-</head>
-<body>
-  <div id="filter-buttons" class="filter-buttons">
-  </div>
-  <button id="open-form-button">Create a Pokemon</button>
-  <button id="show-favourite-button">Favourites</button>
-  <div id="modal-backdrop"></div>
-  <div id="create-pokemon-modal" class="modal">
-    <form id="create-pokemon-form">
-      <label for="pokemonName">Name:</label>
-      <input type="text" id="pokemonName" required><br>
-      <label for="pokemonType">Type:</label>
-      <input type="text" id="pokemonType" required><br>
-      <button type="submit">Create Pokemon</button>
-    </form>
-  </div>
-  <div id="container">
-  </div>
-
-  <template id="template">
-    <div class="pokemon-card">
-      <img class="pokemon-image" src="" alt="Pokemon Image">
-      <h2 class="pokemon-name"></h2>
-      <p class="pokemon-type"></p>
-      <button class="edit-button">Edit</button>
-      <button class="favourite-button">favourite</button>
-      <button class="delete-button">Delete</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokemon Overview</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <div id="filter-buttons" class="filter-buttons"></div>
+    <button id="open-form-button">Create a Pokemon</button>
+    <button id="show-favourite-button">Favourites</button>
+    <div id="modal-backdrop"></div>
+    <div id="create-pokemon-modal" class="modal">
+      <form id="create-pokemon-form">
+        <label for="pokemonName">Name:</label>
+        <input type="text" id="pokemonName" required /><br />
+        <label for="pokemonType">Type:</label>
+        <input type="text" id="pokemonType" required /><br />
+        <button type="submit" class="create-pokemon">Create Pokemon</button>
+      </form>
     </div>
-  </template>
+    <div id="container"></div>
 
-  <template id="remove-favourite-template">
-    <div class="pokemon-card">
-      <img class="pokemon-image" src="" alt="Pokemon Image">
-      <h2 class="pokemon-name"></h2>
-      <p class="pokemon-type"></p>
-      <button class="edit-button">Edit</button>
-      <button class="remove-favourite-button">Remove favourite</button>
-      <button class="delete-button">Delete</button>
-    </div>
-  </template>
+    <template id="template">
+      <div class="pokemon-card">
+        <img class="pokemon-image" src="" alt="Pokemon Image" />
+        <h2 class="pokemon-name"></h2>
+        <p class="pokemon-type"></p>
+        <button class="edit-button">Edit</button>
+        <button class="favourite-button">favourite</button>
+        <button class="delete-button">Delete</button>
+      </div>
+    </template>
 
-  <template id="filter-button">
-    <button class="filter-button"></button>
-  </template>
-</body>
+    <template id="remove-favourite-template">
+      <div class="pokemon-card">
+        <img class="pokemon-image" src="" alt="Pokemon Image" />
+        <h2 class="pokemon-name"></h2>
+        <p class="pokemon-type"></p>
+        <button class="remove-favourite-button">Remove favourite</button>
+      </div>
+    </template>
+
+    <template id="filter-button">
+      <button class="filter-button"></button>
+    </template>
+  </body>
 </html>
