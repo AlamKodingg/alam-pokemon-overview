@@ -13,7 +13,7 @@ async function fetchPokemonData(pokemonId) {
 async function displayPokemonData(pokemonId, containerId) {
   const pokemon = await fetchPokemonData(pokemonId);
   const container = document.getElementById(containerId);
-  debugger
+
   container.innerHTML = `
     <img src="${pokemon.image}" alt="${pokemon.name}">
     <div>
